@@ -1,6 +1,9 @@
 import os
 import time
+import sys
 
-recent_path = 'C:\\Users\\liste\\AppData\\Roaming\\Microsoft\\Windows\\Recent'
+recent_path = 'C:\\Users\\zcc\\AppData\\Roaming\\Microsoft\\Windows\\Recent'
 
-print(os.listdir(recent_path))
+if __name__ == "__main__":
+    for j, p in enumerate(os.listdir(recent_path)):
+        print('<p>%03d: %s' % (j, p))

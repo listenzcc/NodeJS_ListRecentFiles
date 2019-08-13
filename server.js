@@ -1,18 +1,41 @@
-﻿var http = require('http');
-var fs = require("fs");
+﻿// Hello world
 
-var data = fs.readFileSync('server.js');
-console.log(data.toString());
+var fs = require('fs');
+var serverjstxt = fs.readFileSync('server.js');
+console.log(serverjstxt.toString());
 
-http.createServer(function (request, response) {
-    
-    // 发送 HTTP 头部 
-    // HTTP 状态值: 200 : OK
-    // 内容类型: text/plain
-    response.writeHead(200, {'Content-Type': 'text/plain;charset=utf-8'});
+const iconv = require('iconv-lite');
+var encoding = 'cp936';
+var binaryEncoding = 'binary';
 
-    // 发送响应数据 "Hello World"
-    response.end(data.toString());
+var exec = require('child_process').exec;
+var data = 'data';
+exec('python list_recentfile.py',
+    {encoding: 'binary'},
+    function(error, stdout, stderr){
+        data = iconv.decode(new Buffer(stdout, 'binary'), 'cp936');
+        // console.log(iconv.decode(new Buffer(stdout, binaryEncoding), encoding));
+        // console.log(data, iconv.decode(stdout, 'cp936'));
+        console.log('--');
+    });
+
+console.log('--');
+
+const http = require('http');
+http.createServer(function (req, res) {
+    res.writeHead(200, {'Content-Type': 'text/html'});
+    res.write('<head><meta charset="utf-8"/></head>');
+    res.write('Start...\n');
+    res.write('中文测试\n');
+    res.write(data);
+    res.end('\nStop.');
+
+    console.log(data);
+
+    // res.end(serverjstxt.toString());
+    // subprocess.stdout.on('data', (data) => {
+    //     res.end('xxx');
+    // });
 }).listen(8888);
 
 
